@@ -36,13 +36,13 @@ int main(void)
         //opening of all files first - for scales
         for(int i=0; i<NO_OF_FILES; i++){   
             sprintf(fileNameAndPath, "/sys/bus/iio/devices/iio\:device%s_scale", fileNames[i]);
-            FILE* fp_scale[i] = fopen(fileNameAndPath, "rb");  // rb - binary files for read only
-            if(!fp){ perror("File opening failed");  return EXIT_FAILURE; }
+            fp_scale[i] = fopen(fileNameAndPath, "rb");  // rb - binary files for read only
+            if(!fp_scale[i]){ perror("File opening failed");  return EXIT_FAILURE; }
         }
         //opening of all files first - for raw values
         for(int i=0; i<NO_OF_FILES; i++){   
             sprintf(fileNameAndPath, "/sys/bus/iio/devices/iio\:device%s_raw", fileNames[i]);
-            FILE* fp_raw[i] = fopen(fileNameAndPath, "rb");  // rb - binary files for read only
+            fp_raw[i] = fopen(fileNameAndPath, "rb");  // rb - binary files for read only
             if(!fp){ perror("File opening failed");  return EXIT_FAILURE; }
         }
         //read and print scales
@@ -56,7 +56,7 @@ int main(void)
     //while(getc(stdin) != EOF){
     //system("clear"); //in linux bash this clears the screen
         for(int i=0; i<NO_OF_FILES; i++){
-            fscanf(fp_raw, "%d", raw+i);  //read value from device file
+            fscanf(fp_raw[i], "%d", raw+i);  //read value from device file
             calculatedResults[i] = raw[i]*multipliers[i]*scale[i];
             printf("%s: %d | %f\n", values[i], raw[i], calculatedResults[i]);  //print the values to the screen
         }
