@@ -61,13 +61,12 @@ int main(void)
             fscanf(fp_raw[i], "%d", raw+i);  //read value from device file
             calculatedResults[i] = raw[i]*multipliers[i]*scale[i];
         }
+        for(int i=0; i<NO_OF_FILES; i++){
+        printf("%s: %d | %f\n", values[i], raw[i], calculatedResults[i]);  //print the values to the screen
+        }
         usleep(200000);
     }
-        
-    for(int i=0; i<NO_OF_FILES; i++){
-        printf("%s: %d | %f\n", values[i], raw[i], calculatedResults[i]);  //print the values to the screen
-    }
-        
+         
     for(int i=0; i<NO_OF_FILES; i++){
         fclose(fp_scale[i]);
         fclose(fp_raw[i]);
