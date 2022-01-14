@@ -54,7 +54,7 @@ int main(void)
     }
 
     //read raw values - "k" times
-    for(int k=0; k<20; k++){
+    for(int k=0; k<200; k++){
     //while(getc(stdin) != EOF){
     //system("clear"); //in linux bash this clears the screen
         for(int i=0; i<NO_OF_FILES; i++){
@@ -64,7 +64,7 @@ int main(void)
         for(int i=0; i<NO_OF_FILES; i++){
         printf("%s: %d | %f\n", values[i], raw[i], calculatedResults[i]);  //print the values to the screen
         }
-        usleep(200000);
+        usleep(100000);
     }
          
     for(int i=0; i<NO_OF_FILES; i++){
