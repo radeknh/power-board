@@ -43,7 +43,7 @@ int main(void)
         for(int i=0; i<NO_OF_FILES; i++){   
             sprintf(fileNameAndPath, "/sys/bus/iio/devices/iio\:device%s_raw", fileNames[i]);
             fp_raw[i] = fopen(fileNameAndPath, "rb");  // rb - binary files for read only
-            if(!fp){ perror("File opening failed");  return EXIT_FAILURE; }
+            if(!fp_raw[i]){ perror("File opening failed");  return EXIT_FAILURE; }
         }
         //read and print scales
         for(int i=0; i<NO_OF_FILES; i++){
