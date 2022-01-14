@@ -3,62 +3,71 @@
 #include <unistd.h> //for usleep
 
 
-#define RTOP 113000
-#define RBOTTOM 4700
-#define MULT_VBAT ((RTOP+RBOTTOM)/RBOTTOM)
-#define MULT_IDIG 4
-#define MULT_ICH 2
-#define MULT_TEMP 1
+#define RTOP        113000
+#define RBOTTOM     4700
+#define MULT_VBAT   ((RTOP+RBOTTOM)/RBOTTOM)
+#define MULT_IDIG   4
+#define MULT_ICH    2
+#define MULT_TEMP   1
+#define NO_OF_FILES 7
+#define FILEPATH_MAX_LENGTH 100
+#define FILENAME_MAX_LENGTH 14
 
-char values[7][6] = {     "VBAT1",         "VBAT2",         "IDIG ",          "TEMP1",
-                          "TEMP2",         "ICH1 ",         "ICH2 " };
-char fileNames[7][14] = { "1/in_voltage2", "1/in_voltage0", "1/in_voltage1", "0/in_voltage0",
-                          "0/in_voltage1", "0/in_voltage3", "0/in_voltage2" };
-float multipliers[7] = {  MULT_VBAT,       MULT_VBAT,       MULT_IDIG,        MULT_TEMP,
-                          MULT_TEMP,       MULT_ICH,        MULT_ICH };
-float scale[7] = {0};
-int raw[7] = {0};
-float results[7] = {0};
+char values[NO_OF_FILES][6] =  //maximum value name length
+        {     "VBAT1",         "VBAT2",         "IDIG ",          "TEMP1",  //names should have the same length
+              "TEMP2",         "ICH1 ",         "ICH2 " };
+char fileNames[NO_OF_FILES][FILENAME_MAX_LENGTH] = 
+        { "1/in_voltage2", "1/in_voltage0", "1/in_voltage1", "0/in_voltage0",
+          "0/in_voltage1", "0/in_voltage3", "0/in_voltage2" };
+float multipliers[NO_OF_FILES] = 
+        {  MULT_VBAT,       MULT_VBAT,       MULT_IDIG,        MULT_TEMP,
+           MULT_TEMP,       MULT_ICH,        MULT_ICH };
+float scale[NO_OF_FILES] = {0};
+int raw[NO_OF_FILES] = {0};
+float calculatedResults[NO_OF_FILES] = {0};
 
 int main(void)
 {
-        char fn[100];
-        for(int i=0; i<7; i++)
-        {
-                sprintf(fn, "/sys/bus/iio/devices/iio\:device%s_scale", fileNames[i]);
-                FILE* fp = fopen(fn, "rb");
-                if(!fp)
-                {
-                        perror("File opening failed");
-                        return EXIT_FAILURE;
-                }
-                fscanf(fp, "%f", scale+i);
-                fclose(fp);
-                printf("%s: %f \n", values[i], scale[i]);
+        
+        FILE* fp_scale[NO_OF_FILES];
+        FILE* fp_raw[NO_OF_FILES];
+        char fileNameAndPath[FILEPATH_MAX_LENGTH];
+  
+        //opening of all files first - for scales
+        for(int i=0; i<NO_OF_FILES; i++){   
+            sprintf(fileNameAndPath, "/sys/bus/iio/devices/iio\:device%s_scale", fileNames[i]);
+            FILE* fp_scale[i] = fopen(fileNameAndPath, "rb");  // rb - binary files for read only
+            if(!fp){ perror("File opening failed");  return EXIT_FAILURE; }
+        }
+        //opening of all files first - for raw values
+        for(int i=0; i<NO_OF_FILES; i++){   
+            sprintf(fileNameAndPath, "/sys/bus/iio/devices/iio\:device%s_raw", fileNames[i]);
+            FILE* fp_raw[i] = fopen(fileNameAndPath, "rb");  // rb - binary files for read only
+            if(!fp){ perror("File opening failed");  return EXIT_FAILURE; }
+        }
+        //read and print scales
+        for(int i=0; i<NO_OF_FILES; i++){
+            fscanf(fp_scale[i], "%f", scale+i);
+            printf("%s: %f \n", values[i], scale[i]);
         }
 
-        //read raw values
-        while(1){
-        //while(getc(stdin) != EOF){
-        system("clear"); //in linux bash this clears the screen
-                for(int i=0; i<7; i++)
-                {
-                        sprintf(fn, "/sys/bus/iio/devices/iio\:device%s_raw", fileNames[i]);
-                        FILE* fp = fopen(fn, "rb");
-                        if(!fp)
-                        {
-                                perror("File opening failed");
-                                return EXIT_FAILURE;
-                        }
-                        fscanf(fp, "%d", raw+i);  //read value from device file
-                        fclose(fp);
-                        printf("%s: %d \n", values[i], raw[i]);  //print the raw values to screen
-                        results[i] = raw[i]*multipliers[i]*scale[i];
-                        printf("%s: %f \n", values[i], results[i]); //print the final results
-                }
+    //read and print raw values
+    for(int k=0; k<20; k++){
+    //while(getc(stdin) != EOF){
+    //system("clear"); //in linux bash this clears the screen
+        for(int i=0; i<NO_OF_FILES; i++){
+            fscanf(fp_raw, "%d", raw+i);  //read value from device file
+            calculatedResults[i] = raw[i]*multipliers[i]*scale[i];
+            printf("%s: %d | %f\n", values[i], raw[i], calculatedResults[i]);  //print the values to the screen
+        }
         usleep(200000);
-        }
-
+    }
+        
+    for(int i=0; i<NO_OF_FILES; i++){
+        fclose(fp_scale[i]);
+        fclose(fp_raw[i]);
+    }
+    
         //int status = system("echo test");
         //return status;
 }
