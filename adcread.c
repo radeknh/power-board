@@ -55,12 +55,14 @@ int main(void)
             calculatedResults[i] = raw[i]*multipliers[i]*scale[i];
             fclose(fp_raw[i]);
         }
-        for(int i=0; i<NO_OF_FILES; i++){
-        //printf("%s: %5.2f | raw: %d\n", values[i], calculatedResults[i], raw[i]);  //print the values to the screen
-        }
+        /*for(int i=0; i<NO_OF_FILES; i++){
+             printf("%s: %5.2f | raw: %d\n", values[i], calculatedResults[i], raw[i]);  //print the values to the screen
+        }*/
         usleep(20000);
     }
-        printf("%s: %5.2f | raw: %d\n", values[i], calculatedResults[i], raw[i]);  //print the values to the screen
-        //int status = system("echo test");
-        //return status;
+    for(int i=0; i<NO_OF_FILES; i++){
+         printf("%s: %5.2f | raw: %d\n", values[i], calculatedResults[i], raw[i]);  //print the values to the screen
+    }
+    //int status = system("echo test");
+    //return status;
 }
