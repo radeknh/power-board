@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h> //for usleep
+#include <time.h>
 
 
 #define RTOP        113000
@@ -55,10 +56,11 @@ int main(void)
             fclose(fp_raw[i]);
         }
         for(int i=0; i<NO_OF_FILES; i++){
-        printf("%s: %5.2f | raw: %d\n", values[i], calculatedResults[i], raw[i]);  //print the values to the screen
+        //printf("%s: %5.2f | raw: %d\n", values[i], calculatedResults[i], raw[i]);  //print the values to the screen
         }
         usleep(20000);
     }
+        printf("%s: %5.2f | raw: %d\n", values[i], calculatedResults[i], raw[i]);  //print the values to the screen
         //int status = system("echo test");
         //return status;
 }
