@@ -58,7 +58,7 @@ int main(void)
         for(int i=0; i<NO_OF_FILES; i++){
              printf("%s: %5.2f | raw: %d\n", values[i], calculatedResults[i], raw[i]);  //print the values to the screen
         }
-        usleep(20000);
+        usleep(330000);
     }
    /* for(int i=0; i<NO_OF_FILES; i++){
          printf("%s: %5.2f | raw: %d\n", values[i], calculatedResults[i], raw[i]);  //print the values to the screen
