@@ -49,7 +49,7 @@ int main(int argc, char *argv[]){
     int conversionDelay = DEFAULT_CONV_DELAY;  //us
     
     // check flags
-    for(i=1; i<argc, i++){  //start from i=1 because argv[0] contains program name
+    for(int i=1; i<argc; i++){  //start from i=1 because argv[0] contains program name
         if(argv[i] == "-n"){
             conversionNumber = atoi(argv[i+1]);
             i++;
