@@ -50,7 +50,7 @@ int main(int argc, char *argv[]){
     
     // check flags
     for(int i=1; i<argc; i++){  //start from i=1 because argv[0] contains program name
-        printf("%s", argv[i]);
+        printf("%s \n", argv[i]);
         if(argv[i] == "-n"){
             conversionNumber = atoi(argv[i+1]);
             i++;
@@ -59,6 +59,7 @@ int main(int argc, char *argv[]){
             conversionDelay = atoi(argv[i+1]);
             i++;
         }   
+        printf("%d %d \n", conversionNumber, conversionDelay);
     }
     
     readScales();
