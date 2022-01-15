@@ -40,38 +40,38 @@ int main(void)
         if(!fp_scale[i]){ perror("File opening failed");  return EXIT_FAILURE; }
     }
         
-    //opening of all files first - for raw values
+    /*//opening of all files first - for raw values
     for(int i=0; i<NO_OF_FILES; i++){   
         sprintf(fileNameAndPath, "/sys/bus/iio/devices/iio\:device%s_raw", fileNames[i]);
         fp_raw[i] = fopen(fileNameAndPath, "rb");  // rb - binary files for read only
         if(!fp_raw[i]){ perror("File opening failed");  return EXIT_FAILURE; }
-    }
+    }*/
         
     //read scales
     for(int i=0; i<NO_OF_FILES; i++){
         fscanf(fp_scale[i], "%f", scale+i);
         printf("%s: %f \n", values[i], scale[i]);
+        fclose(fp_scale[i]); //close files after read
     }
+    
 
     //read raw values - "k" times
     for(int k=0; k<10; k++){
     //while(getc(stdin) != EOF){
     //system("clear"); //in linux bash this clears the screen
         for(int i=0; i<NO_OF_FILES; i++){
+            sprintf(fileNameAndPath, "/sys/bus/iio/devices/iio\:device%s_raw", fileNames[i]);
+            fp_raw[i] = fopen(fileNameAndPath, "rb");  // rb - binary files for read only
+            if(!fp_raw[i]){ perror("File opening failed");  return EXIT_FAILURE; }
             fscanf(fp_raw[i], "%d", raw+i);  //read value from device file
             calculatedResults[i] = raw[i]*multipliers[i]*scale[i];
+            fclose(fp_raw[i]);
         }
         for(int i=0; i<NO_OF_FILES; i++){
         printf("%s: %d | %f\n", values[i], raw[i], calculatedResults[i]);  //print the values to the screen
         }
         usleep(200000);
     }
-         
-    for(int i=0; i<NO_OF_FILES; i++){
-        fclose(fp_scale[i]);
-        fclose(fp_raw[i]);
-    }
-    
         //int status = system("echo test");
         //return status;
 }
