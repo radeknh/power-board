@@ -13,13 +13,13 @@
 #define FILEPATH_MAX_LENGTH 100
 #define FILENAME_MAX_LENGTH 14
 
-char values[NO_OF_FILES][10] =  //maximum value name length
-        {     "VBAT1 [mV]",         "VBAT2 [mV]",         "IDIG [mA]",          "TEMP1    ",  //names should have the same length
-              "TEMP2    ",         "ICH1 [mA]",         "ICH2 [mA]" };
-char fileNames[NO_OF_FILES][FILENAME_MAX_LENGTH] = 
-        { "1/in_voltage2", "1/in_voltage0", "1/in_voltage1", "0/in_voltage0",
+const char values[NO_OF_FILES][11] =  //maximum value name length
+        {     "VBAT1 [mV]",         "VBAT2 [mV]",         "IDIG [mA] ",          "TEMP1     ",  //names should have the same length (why?)
+              "TEMP2     ",         "ICH1 [mA] ",         "ICH2 [mA] " };
+const char fileNames[NO_OF_FILES][FILENAME_MAX_LENGTH] = 
+        { "1/in_volpage2", "1/in_voltage0", "1/in_voltage1", "0/in_voltage0",
           "0/in_voltage1", "0/in_voltage3", "0/in_voltage2" };
-float multipliers[NO_OF_FILES] = 
+const int multipliers[NO_OF_FILES] = 
         {  MULT_VBAT,       MULT_VBAT,       MULT_IDIG,        MULT_TEMP,
            MULT_TEMP,       MULT_ICH,        MULT_ICH };
 float scale[NO_OF_FILES] = {0};
@@ -57,8 +57,6 @@ int main(void)
 
     //read raw values - "k" times
     for(int k=0; k<300; k++){
-    //while(getc(stdin) != EOF){
-    //system("clear"); //in linux bash this clears the screen
         for(int i=0; i<NO_OF_FILES; i++){
             sprintf(fileNameAndPath, "/sys/bus/iio/devices/iio\:device%s_raw", fileNames[i]);
             fp_raw[i] = fopen(fileNameAndPath, "rb");  // rb - binary files for read only
@@ -70,7 +68,7 @@ int main(void)
         for(int i=0; i<NO_OF_FILES; i++){
         printf("%s: %5.2f | raw: %d\n", values[i], calculatedResults[i], raw[i]);  //print the values to the screen
         }
-        usleep(50000);
+        usleep(20000);
     }
         //int status = system("echo test");
         //return status;
