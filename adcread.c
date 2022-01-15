@@ -13,6 +13,8 @@
 #define NO_OF_FILES 7
 #define FILEPATH_MAX_LENGTH 100
 #define FILENAME_MAX_LENGTH 14
+#define DEFAULT_CONV_DELAY  300000   //us
+#define DEFAULT_CONV_NUMBER 1
 
 const char values[NO_OF_FILES][11] =  //maximum value name length
         {     "VBAT1 [mV]",         "VBAT2 [mV]",         "IDIG [mA] ",          "TEMP1     ",  //names should have the same length (why?)
@@ -41,12 +43,27 @@ void readScales(void){
     }
 }
 
-int main(void)
-{  
+int main(int argc, char *argv[]){  
+    //set default values
+    int conversionNumber = DEFAULT_CONV_NUMBER;
+    int conversionDelay = DEFAULT_CONV_DELAY;  //us
+    
+    // check flags
+    for(i=1; i<argc, i++){  //start from i=1 because argv[0] contains program name
+        if(argv[i] == "-n"){
+            conversionNumber = atoi(argv[i+1]);
+            i++;
+        }
+        if(argv[i] == "-d"){
+            conversionDelay = atoi(argv[i+1]);
+            i++;
+        }   
+    }
+    
     readScales();
     char fileNameAndPath[FILEPATH_MAX_LENGTH];
     //read raw values - "k" times
-    for(int k=0; k<300; k++){
+    for(int k=0; k<conversionNumber; k++){
         for(int i=0; i<NO_OF_FILES; i++){
             sprintf(fileNameAndPath, "/sys/bus/iio/devices/iio\:device%s_raw", fileNames[i]);
             fp_raw[i] = fopen(fileNameAndPath, "rb");  // rb - binary files for read only
@@ -58,11 +75,8 @@ int main(void)
         for(int i=0; i<NO_OF_FILES; i++){
              printf("%s: %5.2f | raw: %d\n", values[i], calculatedResults[i], raw[i]);  //print the values to the screen
         }
-        usleep(330000);
+        usleep(conversionDelay);
     }
-   /* for(int i=0; i<NO_OF_FILES; i++){
-         printf("%s: %5.2f | raw: %d\n", values[i], calculatedResults[i], raw[i]);  //print the values to the screen
-    }*/
     //int status = system("echo test");
     //return status;
 }
