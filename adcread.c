@@ -50,11 +50,11 @@ int main(void)
     //read scales
     for(int i=0; i<NO_OF_FILES; i++){
         fscanf(fp_scale[i], "%f", scale+i);
-        //printf("%s: %f \n", values[i], scale[i]);
+        printf("%s: %f \n", values[i], scale[i]);
     }
 
     //read raw values - "k" times
-    for(int k=0; k<200; k++){
+    for(int k=0; k<10; k++){
     //while(getc(stdin) != EOF){
     //system("clear"); //in linux bash this clears the screen
         for(int i=0; i<NO_OF_FILES; i++){
@@ -64,7 +64,7 @@ int main(void)
         for(int i=0; i<NO_OF_FILES; i++){
         printf("%s: %d | %f\n", values[i], raw[i], calculatedResults[i]);  //print the values to the screen
         }
-        usleep(100000);
+        usleep(200000);
     }
          
     for(int i=0; i<NO_OF_FILES; i++){
