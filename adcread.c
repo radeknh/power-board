@@ -5,7 +5,7 @@
 
 #define RTOP        113000
 #define RBOTTOM     4700
-#define MULT_VBAT   ((RTOP+RBOTTOM)/RBOTTOM)
+#define MULT_VBAT   ((RTOP+RBOTTOM)/RBOTTOM)/1000
 #define MULT_IDIG   4
 #define MULT_ICH    2
 #define MULT_TEMP   1
@@ -13,9 +13,9 @@
 #define FILEPATH_MAX_LENGTH 100
 #define FILENAME_MAX_LENGTH 14
 
-char values[NO_OF_FILES][6] =  //maximum value name length
-        {     "VBAT1",         "VBAT2",         "IDIG ",          "TEMP1",  //names should have the same length
-              "TEMP2",         "ICH1 ",         "ICH2 " };
+char values[NO_OF_FILES][10] =  //maximum value name length
+        {     "VBAT1 [V]",         "VBAT2 [V]",         "IDIG [mA]",          "TEMP1    ",  //names should have the same length
+              "TEMP2    ",         "ICH1 [mA]",         "ICH2 [mA]" };
 char fileNames[NO_OF_FILES][FILENAME_MAX_LENGTH] = 
         { "1/in_voltage2", "1/in_voltage0", "1/in_voltage1", "0/in_voltage0",
           "0/in_voltage1", "0/in_voltage3", "0/in_voltage2" };
@@ -50,7 +50,7 @@ int main(void)
     //read scales
     for(int i=0; i<NO_OF_FILES; i++){
         fscanf(fp_scale[i], "%f", scale+i);
-        printf("%s: %f \n", values[i], scale[i]);
+        printf("%s scale: %.1f \n", values[i], scale[i]);
         fclose(fp_scale[i]); //close files after read
     }
     
@@ -68,7 +68,7 @@ int main(void)
             fclose(fp_raw[i]);
         }
         for(int i=0; i<NO_OF_FILES; i++){
-        printf("%s: %d | %f\n", values[i], raw[i], calculatedResults[i]);  //print the values to the screen
+        printf("%s: %5.2f | raw: %d\n", values[i], calculatedResults[i], raw[i]);  //print the values to the screen
         }
         usleep(200000);
     }
