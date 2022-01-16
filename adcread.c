@@ -47,7 +47,7 @@ int readScales(void){
 int main(int argc, char *argv[]){  
     //set default values
     int conversionNumber = DEFAULT_CONV_NUMBER;
-    int conversionDelay = DEFAULT_CONV_DELAY;  //us
+    int conversionDelay = DEFAULT_CONV_DELAY;  //ms
     
     // check flags
     for(int i=1; i<argc; i++){  //start from i=1 because argv[0] contains program name
@@ -55,15 +55,22 @@ int main(int argc, char *argv[]){
         if(strcmp(argv[i-1], "-n") == 0){
             conversionNumber = atoi(argv[i]);
             printf("%s %s \n", argv[i], argv[i]);
-            i++;
         }
         if(strcmp(argv[i-1], "-d") == 0){
-            conversionDelay = atoi(argv[i]);
+            conversionDelay = 1000*atoi(argv[i]);
             printf("%s %s \n", argv[i], argv[i]);
-            i++;
         }   
         printf("%d %d \n", conversionNumber, conversionDelay);
     }
+    if((conversionNumber < 1) || ( conversionNumber > 2000)){
+        printf("Please provide n between 1 and 2000 \n");
+        return EXIT_FAILURE;
+    }
+    if((conversionDelay < 20000) || ( conversionDelay > 1000000)){
+        printf("Please provide d between 20 and 1000 [in miliseconds]\n");
+        return EXIT_FAILURE;
+    }
+    
     
     if(readScales() == EXIT_FAILURE) return EXIT_FAILURE;
     char fileNameAndPath[FILEPATH_MAX_LENGTH];
