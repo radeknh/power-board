@@ -32,7 +32,7 @@ float calculatedResults[NO_OF_FILES] = {0};
 FILE* fp_scale[NO_OF_FILES];
 FILE* fp_raw[NO_OF_FILES];
         
-void readScales(void){
+int readScales(void){
     char fileNameAndPath[FILEPATH_MAX_LENGTH];
     for(int i=0; i<NO_OF_FILES; i++){   
         sprintf(fileNameAndPath, "/sys/bus/iio/devices/iio\:device%s_scale", fileNames[i]);
@@ -52,20 +52,20 @@ int main(int argc, char *argv[]){
     // check flags
     for(int i=1; i<argc; i++){  //start from i=1 because argv[0] contains program name
         printf("%s %s \n", argv[i], argv[i+1]);
-        if(strcmp(argv[i], "-n") == 0){
-            conversionNumber = atoi(argv[i+1]);
-            printf("%s %s \n", argv[i], argv[i+1]);
+        if(strcmp(argv[i-1], "-n") == 0){
+            conversionNumber = atoi(argv[i]);
+            printf("%s %s \n", argv[i], argv[i]);
             i++;
         }
-        if(strcmp(argv[i], "-d") == 0){
-            conversionDelay = atoi(argv[i+1]);
-            printf("%s %s \n", argv[i], argv[i+1]);
+        if(strcmp(argv[i-1], "-d") == 0){
+            conversionDelay = atoi(argv[i]);
+            printf("%s %s \n", argv[i], argv[i]);
             i++;
         }   
         printf("%d %d \n", conversionNumber, conversionDelay);
     }
     
-    readScales();
+    if(readScales() == EXIT_FAILURE) return EXIT_FAILURE;
     char fileNameAndPath[FILEPATH_MAX_LENGTH];
     //read raw values - "k" times
     for(int k=0; k<conversionNumber; k++){
