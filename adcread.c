@@ -7,7 +7,7 @@
 
 #define RTOP        113000
 #define RBOTTOM     4700
-#define MULT_VBAT   ((RTOP+RBOTTOM)/RBOTTOM)
+#define MULT_VBAT   ((RTOP+RBOTTOM)/RBOTTOM)    // = 25,04255319148936
 #define MULT_IDIG   4
 #define MULT_ICH    2
 #define MULT_TEMP   1
