@@ -1,7 +1,8 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include <unistd.h> //for usleep
-#include <time.h>
+#include <unistd.h> //for usleep()
+#include <time.h>   // not used yet - for timestamps in the future?
+#include <string.h> //for strcmp()
 
 
 #define RTOP        113000
@@ -51,12 +52,12 @@ int main(int argc, char *argv[]){
     // check flags
     for(int i=1; i<argc; i++){  //start from i=1 because argv[0] contains program name
         printf("%s %s \n", argv[i], argv[i+1]);
-        if(argv[i] == 'n'){
+        if(strcmp(argv[i], "-n") == 0){
             conversionNumber = atoi(argv[i+1]);
             printf("%s %s \n", argv[i], argv[i+1]);
             i++;
         }
-        if(argv[i] == 'd'){
+        if(strcmp(argv[i], "-d") == 0){
             conversionDelay = atoi(argv[i+1]);
             printf("%s %s \n", argv[i], argv[i+1]);
             i++;
