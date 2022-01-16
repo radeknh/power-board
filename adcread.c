@@ -51,16 +51,12 @@ int main(int argc, char *argv[]){
     
     // check flags
     for(int i=1; i<argc; i++){  //start from i=1 because argv[0] contains program name
-        printf("%s %s \n", argv[i], argv[i+1]);
         if(strcmp(argv[i-1], "-n") == 0){
             conversionNumber = atoi(argv[i]);
-            printf("%s %s \n", argv[i], argv[i]);
         }
         if(strcmp(argv[i-1], "-d") == 0){
             conversionDelay = 1000*atoi(argv[i]);
-            printf("%s %s \n", argv[i], argv[i]);
         }   
-        printf("%d %d \n", conversionNumber, conversionDelay);
     }
     if((conversionNumber < 1) || ( conversionNumber > 2000)){
         printf("Please provide n between 1 and 2000 \n");
@@ -70,6 +66,7 @@ int main(int argc, char *argv[]){
         printf("Please provide d between 20 and 1000 [in miliseconds]\n");
         return EXIT_FAILURE;
     }
+    printf("Number of conversions: %d, delay: %dms\n", conversionNumber, conversionDelay);
     
     
     if(readScales() == EXIT_FAILURE) return EXIT_FAILURE;
@@ -87,6 +84,7 @@ int main(int argc, char *argv[]){
         for(int i=0; i<NO_OF_FILES; i++){
              printf("%s: %5.2f | raw: %d\n", values[i], calculatedResults[i], raw[i]);  //print the values to the screen
         }
+        printf("====================\n");
         usleep(conversionDelay);
     }
     //int status = system("echo test");
