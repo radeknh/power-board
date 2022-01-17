@@ -23,7 +23,7 @@ The documentation for WiringPi I2C library can be found here: http://wiringpi.co
 # Build
 
 To build the executable code, enter the following command:
-> g++ power-board.cpp -l wiringPi -o power-board.o
+> g++ power-board.c -l wiringPi -o power-board.o
 
 # Usage
 
