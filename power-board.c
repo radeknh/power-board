@@ -55,7 +55,7 @@ int main(int argc, char *argv[]){
     char fileNameAndPath[FILEPATH_MAX_LENGTH];
         
     // GPIO init
-    wiringPiSetup();
+    wiringPiSetupGpio();
     pinMode(GPIO_MOTOR_ON, OUTPUT);
     digitalWrite(GPIO_MOTOR_ON, 1);
     
