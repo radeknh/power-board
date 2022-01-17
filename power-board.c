@@ -4,6 +4,7 @@
 #include <time.h>   // not used yet - for timestamps in the future?
 #include <string.h> //for strcmp()
 #include <wiringPi.h>
+#include <softPwm.h>
 
 
 #define RTOP        113000
@@ -17,7 +18,8 @@
 #define FILENAME_MAX_LENGTH 14
 #define DEFAULT_CONV_DELAY  300000   //us
 #define DEFAULT_CONV_NUMBER 1
-#define GPIO_MOTOR_ON   6
+#define GPIO_MOTOR_ON       6
+#define GPIO_PWM_WATCHDOG   21
 
 const char values[NO_OF_FILES][11] =                                        //maximum value name length
         { "VBAT1 [mV]",    "VBAT2 [mV]",    "IDIG [mA] ",    "TEMP1     ",  //names should have the same length
@@ -58,6 +60,9 @@ int main(int argc, char *argv[]){
     wiringPiSetupGpio();
     pinMode(GPIO_MOTOR_ON, OUTPUT);
     digitalWrite(GPIO_MOTOR_ON, 1);
+        
+    softPwmCreate(GPIO_PWM_WATCHDOG, 0, 100);
+    softPwmWrite(GPIO_PWM_WATCHDOG, 50);
     
     // check command line flags
     for(int i=1; i<argc; i++){  //start from i=1 because argv[0] contains program name
