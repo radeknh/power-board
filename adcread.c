@@ -33,6 +33,7 @@ int raw[NO_OF_FILES] = {0};
 float calculatedResults[NO_OF_FILES] = {0};
 FILE* fp_scale[NO_OF_FILES];
 FILE* fp_raw[NO_OF_FILES];
+bool background = 0;
 
 int readScales(void){
     char fileNameAndPath[FILEPATH_MAX_LENGTH];
@@ -65,7 +66,10 @@ int main(int argc, char *argv[]){
         }
         if(strcmp(argv[i-1], "-d") == 0){
             conversionDelay = 1000*atoi(argv[i]);
-        }   
+        }
+        if(strcmp(argv[i-1], "-b") == 0){
+            background = 1;
+        }  
     }
     if((conversionNumber < 1) || ( conversionNumber > 2000)){
         printf("Please provide n between 1 and 2000 \n");
@@ -90,11 +94,15 @@ int main(int argc, char *argv[]){
             calculatedResults[i] = raw[i]*multipliers[i]*scale[i];
             fclose(fp_raw[i]);
         }
-        for(int i=0; i<NO_OF_FILES; i++){       //print the values to the screen for each scan
+        for(int i=0; (i<NO_OF_FILES) && (background == 0); i++){   //print the values to the screen for each scan
              printf("%s: %5.2f | raw: %d\n", values[i], calculatedResults[i], raw[i]);  
         }
-        printf("====================\n");
         usleep(conversionDelay);
+        if(background == 1){
+            n--;  //infinite loop in background mode
+        }else{
+            printf("====================\n");
+        }
     }
         
         
