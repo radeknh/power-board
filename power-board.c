@@ -54,9 +54,8 @@ int main(int argc, char *argv[]){
     char fileNameAndPath[FILEPATH_MAX_LENGTH];
         
     // GPIO init
-    
-    pinMode(GPIO_MOTOR_ON, OUTPUT);
     wiringPiSetup();
+    pinMode(GPIO_MOTOR_ON, OUTPUT);
     digitalWrite(GPIO_MOTOR_ON, 1);
     
     // check command line flags
