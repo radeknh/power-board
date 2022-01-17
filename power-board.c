@@ -3,7 +3,7 @@
 #include <unistd.h> //for usleep()
 #include <time.h>   // not used yet - for timestamps in the future?
 #include <string.h> //for strcmp()
-#include <wiringPiI2C.h>
+#include <wiringPi.h>
 
 
 #define RTOP        113000
@@ -55,9 +55,9 @@ int main(int argc, char *argv[]){
         
     // GPIO init
     
-    void pinMode(GPIO_MOTOR_ON, OUTPUT);
+    pinMode(GPIO_MOTOR_ON, OUTPUT);
     wiringPiSetup();
-    void digitalWrite(GPIO_MOTOR_ON, 1);
+    digitalWrite(GPIO_MOTOR_ON, 1);
     
     // check command line flags
     for(int i=1; i<argc; i++){  //start from i=1 because argv[0] contains program name
