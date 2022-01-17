@@ -38,7 +38,7 @@ bool background = 0;
 int readScales(void){
     char fileNameAndPath[FILEPATH_MAX_LENGTH];
     for(int i=0; i<NO_OF_FILES; i++){   
-        sprintf(fileNameAndPath, "/sys/bus/iio/devices/iio\:device%s_scale", fileNames[i]);
+        sprintf(fileNameAndPath, "/sys/bus/iio/devices/iio:device%s_scale", fileNames[i]);
         fp_scale[i] = fopen(fileNameAndPath, "rb");  // rb - binary files for read only
         if(!fp_scale[i]){ perror("File opening failed");  return EXIT_FAILURE; }
         fscanf(fp_scale[i], "%f", scale+i);
@@ -66,7 +66,7 @@ int main(int argc, char *argv[]){
         if(strcmp(argv[i-1], "-d") == 0){
             conversionDelay = 1000*atoi(argv[i]);
         }
-        if(strcmp(argv[i-1], "-b") == 0){
+        if(strcmp(argv[i], "-b") == 0){
             background = 1;
         }  
     }
@@ -86,7 +86,7 @@ int main(int argc, char *argv[]){
     //read raw values - "n" times with "conversionDelay" delay
     for(int n=0; n<conversionNumber; n++){
         for(int i=0; i<NO_OF_FILES; i++){
-            sprintf(fileNameAndPath, "/sys/bus/iio/devices/iio\:device%s_raw", fileNames[i]);
+            sprintf(fileNameAndPath, "/sys/bus/iio/devices/iio:device%s_raw", fileNames[i]);
             fp_raw[i] = fopen(fileNameAndPath, "rb");           // rb - binary files for read only
             if(!fp_raw[i]){ perror("File opening failed");  return EXIT_FAILURE; }
             fscanf(fp_raw[i], "%d", raw+i);                     //read value from device file
