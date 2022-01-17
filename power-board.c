@@ -45,6 +45,7 @@ int readScales(void){
         printf("%s scale: %.1f \n", values[i], scale[i]);
         fclose(fp_scale[i]); //close each file after read
     }
+    return 0;
 }
 
 int main(int argc, char *argv[]){  
