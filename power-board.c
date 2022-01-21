@@ -62,9 +62,7 @@ int main(int argc, char *argv[]){
     wiringPiSetupGpio();
     pinMode(GPIO_MOTOR_ON, OUTPUT);
     digitalWrite(GPIO_MOTOR_ON, 1);
-        
-    softPwmCreate(GPIO_PWM_WATCHDOG, 0, watchdogPwmPeriodMult);
-    softPwmWrite(GPIO_PWM_WATCHDOG, 0.5*watchdogPwmPeriodMult);
+
     
     // check command line flags
     for(int i=1; i<argc; i++){  //start from i=1 because argv[0] contains program name
@@ -82,6 +80,12 @@ int main(int argc, char *argv[]){
             if(freqSet < 1000 && freqSet > 0) watchdogPwmPeriodMult = freqSet;
         }  
     }
+        
+            
+    softPwmCreate(GPIO_PWM_WATCHDOG, 0, watchdogPwmPeriodMult);
+    softPwmWrite(GPIO_PWM_WATCHDOG, 0.5*watchdogPwmPeriodMult);
+        
+        
     if((conversionNumber < 1) || ( conversionNumber > 2000)){
         printf("Please provide n between 1 and 2000 \n");
         return EXIT_FAILURE;
