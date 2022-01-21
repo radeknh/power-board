@@ -36,6 +36,7 @@ float calculatedResults[NO_OF_FILES] = {0};
 FILE* fp_scale[NO_OF_FILES];
 FILE* fp_raw[NO_OF_FILES];
 bool background = 0;
+int watchdogPwmPeriodMult = 100; // resulting PWM period is watchdogPwmPeriodMult * 100us = 10ms
 
 int readScales(void){
     char fileNameAndPath[FILEPATH_MAX_LENGTH];
@@ -55,25 +56,30 @@ int main(int argc, char *argv[]){
     int conversionNumber = DEFAULT_CONV_NUMBER;
     int conversionDelay = DEFAULT_CONV_DELAY;  //ms
     char fileNameAndPath[FILEPATH_MAX_LENGTH];
+    int freqSet = 0;
         
     // GPIO init
     wiringPiSetupGpio();
     pinMode(GPIO_MOTOR_ON, OUTPUT);
     digitalWrite(GPIO_MOTOR_ON, 1);
         
-    softPwmCreate(GPIO_PWM_WATCHDOG, 0, 100);
-    softPwmWrite(GPIO_PWM_WATCHDOG, 50);
+    softPwmCreate(GPIO_PWM_WATCHDOG, 0, watchdogPwmPeriodMult);
+    softPwmWrite(GPIO_PWM_WATCHDOG, 0.5*watchdogPwmPeriodMult);
     
     // check command line flags
     for(int i=1; i<argc; i++){  //start from i=1 because argv[0] contains program name
-        if(strcmp(argv[i-1], "-n") == 0){
+        if(strcmp(argv[i-1], "-n") == 0){   // set number of ADC converions
             conversionNumber = atoi(argv[i]);
         }
-        if(strcmp(argv[i-1], "-d") == 0){
+        if(strcmp(argv[i-1], "-d") == 0){   // set delay between ADC conversions
             conversionDelay = 1000*atoi(argv[i]);
         }
-        if(strcmp(argv[i], "-b") == 0){
+        if(strcmp(argv[i], "-b") == 0){  // do not print messages
             background = 1;
+        }  
+        if(strcmp(argv[i-1], "-p") == 0){  // PWM freq set = default is 100Hz
+            freqSet = atoi(argv[i]);
+            if(freqSet < 1000 && freqSet > 0) watchdogPwmPeriodMult = freqSet;
         }  
     }
     if((conversionNumber < 1) || ( conversionNumber > 2000)){
