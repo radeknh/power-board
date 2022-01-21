@@ -77,7 +77,7 @@ int main(int argc, char *argv[]){
         }  
         if(strcmp(argv[i-1], "-p") == 0){  // PWM freq set = default is 100Hz
             freqSet = atoi(argv[i]);
-            if(freqSet < 1000 && freqSet > 0) watchdogPwmPeriodMult = freqSet;
+            if(freqSet < 3000 && freqSet > 100) watchdogPwmPeriodMult = freqSet;
         }  
     }
         
